@@ -1,20 +1,35 @@
+let p1 = document.querySelectorAll('p')[0];
+let p2 = document.querySelectorAll('p')[1];
+let p3 = document.querySelectorAll('p')[2];
 
-const url = "https://api.openweathermap.org/data/2.5/weather?lon=1.44&lat=43.6&appid=6f88826d767f323ad19cd282444924e9"
-const apiMeteo = fetch(url)
+function changerVille(){
+    let ville = document.getElementById('ville').value;
+
+
+
+
+
+    let url = "https://api.openweathermap.org/data/2.5/weather?q="+ ville + "&appid=6f88826d767f323ad19cd282444924e9"
+    const apiMeteo = fetch(url)
                     .then(async response =>{
-                        console.log(response);
-                        const json = await response.json();
-                        console.log(response);
-
-                        let temp = json.main.temp;
-                        temp -= 273.15;
-                        temp = temp.toFixed(2);
-                        let ville = json.name;
-                        let latEtLong = json.coord.lat +' & '+ json.coord.lon;
+                        if(response.status == 200){
+                            const json = await response.json();
+  
+                            let temperature = json.main.temp;
+                            temperature -= 273.15;
+                            temperature = temperature.toFixed(2);
+                            let nomville = json.name;
+                            let temps = json.weather[0].main;
+                        
+                            document.getElementById('nom').textContent = nomville;
+                            document.getElementById('temps').textContent = temps;
+                            document.getElementById('temperature').textContent = temperature;
+                        }else{
+                            console.log("C'est pas ce qui est demandé, changer nom de ville");
+                        }
+                        
                     
-                        document.getElementById('temp').textContent = temp;
-                        document.getElementById('ville').textContent = ville;
-                        document.getElementById('latetlong').textContent = latEtLong;
-                    
-                        document.getElementById('image').setAttribute('src', `https://openweathermap.org/img/wn/` + json.weather[0].icon + "@2x.png");
+                        
                     });
+
+                }
